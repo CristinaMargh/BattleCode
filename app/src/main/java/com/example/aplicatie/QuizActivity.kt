@@ -5,6 +5,7 @@ import android.os.*
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.*
 import kotlin.system.*
+import android.graphics.Color
 
 class QuizActivity : AppCompatActivity() {
 
@@ -76,8 +77,10 @@ class QuizActivity : AppCompatActivity() {
 
         questionText.text = question.text
         answers.forEachIndexed { index, button ->
-            button.setBackgroundColor(resources.getColor(android.R.color.darker_gray)) // Reset culoare
-            button.isClickable = true // Reactivare
+            // Resetăm fundalul la cel frumos cu colțuri rotunjite
+            button.setBackgroundResource(R.drawable.rounded_answer_button)
+            button.setTextColor(resources.getColor(android.R.color.black))
+            button.isClickable = true
             button.isFocusable = true
             button.text = question.options[index]
 
@@ -85,19 +88,21 @@ class QuizActivity : AppCompatActivity() {
                 timer.cancel()
                 val timeTaken = SystemClock.elapsedRealtime() - startTime
 
-                // Corect → verde, Gresit → roșu
+                // Colorăm corect/greșit
                 if (index == question.correctAnswerIndex) {
                     score += calculateScore(timeTaken)
-                    button.setBackgroundColor(resources.getColor(android.R.color.holo_green_light))
+                    button.setBackgroundColor(Color.GREEN)
                 } else {
-                    button.setBackgroundColor(resources.getColor(android.R.color.holo_red_light))
+                    button.setBackgroundResource(R.drawable.answer_wrong)
                 }
 
-                // Blochează toate butoanele după răspuns
-                answers.forEach {   it.isClickable = false
-                                    it.isFocusable = false }
+                // Dezactivăm butoanele
+                answers.forEach {
+                    it.isClickable = false
+                    it.isFocusable = false
+                }
 
-                // Trecere la următoarea întrebare după 1 sec
+                // Trecem la următoarea întrebare
                 Handler(Looper.getMainLooper()).postDelayed({
                     currentQuestionIndex++
                     showQuestion()
