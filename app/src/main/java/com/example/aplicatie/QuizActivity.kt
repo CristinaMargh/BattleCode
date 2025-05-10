@@ -76,17 +76,35 @@ class QuizActivity : AppCompatActivity() {
 
         questionText.text = question.text
         answers.forEachIndexed { index, button ->
+            button.setBackgroundColor(resources.getColor(android.R.color.darker_gray)) // Reset culoare
+            button.isClickable = true // Reactivare
+            button.isFocusable = true
             button.text = question.options[index]
+
             button.setOnClickListener {
                 timer.cancel()
                 val timeTaken = SystemClock.elapsedRealtime() - startTime
+
+                // Corect → verde, Gresit → roșu
                 if (index == question.correctAnswerIndex) {
                     score += calculateScore(timeTaken)
+                    button.setBackgroundColor(resources.getColor(android.R.color.holo_green_light))
+                } else {
+                    button.setBackgroundColor(resources.getColor(android.R.color.holo_red_light))
                 }
-                currentQuestionIndex++
-                showQuestion()
+
+                // Blochează toate butoanele după răspuns
+                answers.forEach {   it.isClickable = false
+                                    it.isFocusable = false }
+
+                // Trecere la următoarea întrebare după 1 sec
+                Handler(Looper.getMainLooper()).postDelayed({
+                    currentQuestionIndex++
+                    showQuestion()
+                }, 1000)
             }
         }
+
 
         startTime = SystemClock.elapsedRealtime()
         startTimer()
