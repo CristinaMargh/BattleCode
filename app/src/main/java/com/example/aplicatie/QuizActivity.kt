@@ -78,7 +78,7 @@ class QuizActivity : AppCompatActivity() {
         questionText.text = question.text
         answers.forEachIndexed { index, button ->
             // Resetăm fundalul la cel frumos cu colțuri rotunjite
-            button.setBackgroundResource(R.drawable.rounded_answer_button)
+            button.setBackgroundResource(R.drawable.r_a_b)
             button.setTextColor(resources.getColor(android.R.color.black))
             button.isClickable = true
             button.isFocusable = true

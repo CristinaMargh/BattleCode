@@ -29,36 +29,40 @@ android:background="#AED6F1"
         android:id="@+id/answer1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Rasp 1"
         android:textSize="18sp"
         android:textColor="#000000"
-        android:background="@drawable/rounded_answer_button"
+        android:background="@drawable/r_a_b"
         android:layout_marginBottom="8dp" />
 
     <Button
         android:id="@+id/answer2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Rasp 2"
         android:textSize="18sp"
         android:textColor="#000000"
-        android:background="@drawable/rounded_answer_button"
+        android:background="@drawable/r_a_b"
         android:layout_marginBottom="8dp" />
 
     <Button
         android:id="@+id/answer3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Rasp 3"
         android:textSize="18sp"
         android:textColor="#000000"
-        android:background="@drawable/rounded_answer_button"
+        android:background="@drawable/r_a_b"
         android:layout_marginBottom="8dp" />
 
     <Button
         android:id="@+id/answer4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Rasp 4"
         android:textSize="18sp"
         android:textColor="#000000"
-        android:background="@drawable/rounded_answer_button"
+        android:background="@drawable/r_a_b"
         android:layout_marginBottom="8dp" />
 
 </LinearLayout>
