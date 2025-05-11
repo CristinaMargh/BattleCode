@@ -51,11 +51,29 @@ class QuizActivity : AppCompatActivity() {
     private lateinit var timer: CountDownTimer
     private var startTime = 0L
 
+    private lateinit var answerButtons: List<Button>
+    private lateinit var questionText: TextView
+    private lateinit var timerText: TextView
+    private lateinit var happyCat: ImageView
+    private lateinit var angryCat: ImageView
+    private lateinit var nextQuestionButton: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quiz)
 
-        val nextQuestionButton = findViewById<Button>(R.id.next_question_button)
+        answerButtons = listOf(
+            findViewById(R.id.answer1),
+            findViewById(R.id.answer2),
+            findViewById(R.id.answer3),
+            findViewById(R.id.answer4)
+        )
+        questionText = findViewById(R.id.question_text)
+        timerText = findViewById(R.id.timer_text)
+        happyCat = findViewById(R.id.happy_cat)
+        angryCat = findViewById(R.id.angry_cat)
+        nextQuestionButton = findViewById(R.id.next_question_button)
+
         nextQuestionButton.setOnClickListener {
             currentQuestionIndex++
             showQuestion()
@@ -72,27 +90,15 @@ class QuizActivity : AppCompatActivity() {
             finish()
             return
         }
-        val angryCat = findViewById<ImageView>(R.id.angry_cat)
-        val happyCat = findViewById<ImageView>(R.id.happy_cat)
-        angryCat.visibility = View.GONE
-        happyCat.visibility = View.GONE
 
-        val nextQuestionButton = findViewById<Button>(R.id.next_question_button)
+        happyCat.visibility = View.GONE
+        angryCat.visibility = View.GONE
         nextQuestionButton.visibility = View.GONE
 
         val question = questions[currentQuestionIndex]
-
-        val questionText = findViewById<TextView>(R.id.question_text)
-        val answers = listOf<Button>(
-            findViewById(R.id.answer1),
-            findViewById(R.id.answer2),
-            findViewById(R.id.answer3),
-            findViewById(R.id.answer4)
-        )
-
         questionText.text = question.text
-        answers.forEachIndexed { index, button ->
-            // Resetăm fundalul la cel frumos cu colțuri rotunjite
+
+        answerButtons.forEachIndexed { index, button ->
             button.setBackgroundResource(R.drawable.r_a_b)
             button.setTextColor(resources.getColor(android.R.color.black))
             button.isClickable = true
@@ -103,58 +109,39 @@ class QuizActivity : AppCompatActivity() {
                 timer.cancel()
                 val timeTaken = SystemClock.elapsedRealtime() - startTime
 
-                // Colorăm corect/greșit
                 if (index == question.correctAnswerIndex) {
                     score += calculateScore(timeTaken)
                     button.setBackgroundResource(R.drawable.answer_correct)
-
-                    val anim = AnimationUtils.loadAnimation(this, R.anim.slide_up)
                     happyCat.visibility = View.VISIBLE
-                    happyCat.startAnimation(anim)
+                    happyCat.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_up))
                 } else {
                     button.setBackgroundResource(R.drawable.answer_wrong)
-                    val angryCat = findViewById<ImageView>(R.id.angry_cat)
-                    val anim = AnimationUtils.loadAnimation(this, R.anim.slide_up)
-
                     angryCat.visibility = View.VISIBLE
-                    angryCat.startAnimation(anim)
+                    angryCat.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_up))
                 }
 
-                // Dezactivăm butoanele
-                answers.forEach {
+                answerButtons.forEach {
                     it.isClickable = false
                     it.isFocusable = false
                 }
 
-                // Colorează răspunsul corect indiferent dacă e greșit sau nu
-                answers[question.correctAnswerIndex].setBackgroundResource(R.drawable.answer_correct)
-
-                // Afișează butonul de next
+                answerButtons[question.correctAnswerIndex].setBackgroundResource(R.drawable.answer_correct)
                 nextQuestionButton.visibility = View.VISIBLE
             }
         }
-
 
         startTime = SystemClock.elapsedRealtime()
         startTimer()
     }
 
     private fun startTimer() {
-        val timerText = findViewById<TextView>(R.id.timer_text)
         timer = object : CountDownTimer(10000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 timerText.text = "Timp rămas: ${millisUntilFinished / 1000}s"
             }
 
             override fun onFinish() {
-                val answers = listOf<Button>(
-                    findViewById(R.id.answer1),
-                    findViewById(R.id.answer2),
-                    findViewById(R.id.answer3),
-                    findViewById(R.id.answer4)
-                )
-
-                answers.forEachIndexed { i, b ->
+                answerButtons.forEachIndexed { i, b ->
                     b.isClickable = false
                     b.isFocusable = false
                     if (i == questions[currentQuestionIndex].correctAnswerIndex) {
@@ -162,14 +149,10 @@ class QuizActivity : AppCompatActivity() {
                     }
                 }
 
-                val angryCat = findViewById<ImageView>(R.id.angry_cat)
                 angryCat.visibility = View.VISIBLE
                 angryCat.startAnimation(AnimationUtils.loadAnimation(this@QuizActivity, R.anim.slide_up))
-
-                val nextQuestionButton = findViewById<Button>(R.id.next_question_button)
                 nextQuestionButton.visibility = View.VISIBLE
             }
-
         }.start()
     }
 
