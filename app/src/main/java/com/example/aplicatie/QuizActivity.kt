@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.widget.*
 import kotlin.system.*
 import android.graphics.Color
+import android.view.View
+import android.view.animation.AnimationUtils
 
 class QuizActivity : AppCompatActivity() {
 
@@ -53,6 +55,12 @@ class QuizActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quiz)
 
+        val nextQuestionButton = findViewById<Button>(R.id.next_question_button)
+        nextQuestionButton.setOnClickListener {
+            currentQuestionIndex++
+            showQuestion()
+        }
+
         showQuestion()
     }
 
@@ -64,6 +72,13 @@ class QuizActivity : AppCompatActivity() {
             finish()
             return
         }
+        val angryCat = findViewById<ImageView>(R.id.angry_cat)
+        val happyCat = findViewById<ImageView>(R.id.happy_cat)
+        angryCat.visibility = View.GONE
+        happyCat.visibility = View.GONE
+
+        val nextQuestionButton = findViewById<Button>(R.id.next_question_button)
+        nextQuestionButton.visibility = View.GONE
 
         val question = questions[currentQuestionIndex]
 
@@ -92,8 +107,17 @@ class QuizActivity : AppCompatActivity() {
                 if (index == question.correctAnswerIndex) {
                     score += calculateScore(timeTaken)
                     button.setBackgroundResource(R.drawable.answer_correct)
+
+                    val anim = AnimationUtils.loadAnimation(this, R.anim.slide_up)
+                    happyCat.visibility = View.VISIBLE
+                    happyCat.startAnimation(anim)
                 } else {
                     button.setBackgroundResource(R.drawable.answer_wrong)
+                    val angryCat = findViewById<ImageView>(R.id.angry_cat)
+                    val anim = AnimationUtils.loadAnimation(this, R.anim.slide_up)
+
+                    angryCat.visibility = View.VISIBLE
+                    angryCat.startAnimation(anim)
                 }
 
                 // Dezactivăm butoanele
@@ -102,11 +126,11 @@ class QuizActivity : AppCompatActivity() {
                     it.isFocusable = false
                 }
 
-                // Trecem la următoarea întrebare
-                Handler(Looper.getMainLooper()).postDelayed({
-                    currentQuestionIndex++
-                    showQuestion()
-                }, 1000)
+                // Colorează răspunsul corect indiferent dacă e greșit sau nu
+                answers[question.correctAnswerIndex].setBackgroundResource(R.drawable.answer_correct)
+
+                // Afișează butonul de next
+                nextQuestionButton.visibility = View.VISIBLE
             }
         }
 
@@ -123,9 +147,29 @@ class QuizActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                currentQuestionIndex++
-                showQuestion()
+                val answers = listOf<Button>(
+                    findViewById(R.id.answer1),
+                    findViewById(R.id.answer2),
+                    findViewById(R.id.answer3),
+                    findViewById(R.id.answer4)
+                )
+
+                answers.forEachIndexed { i, b ->
+                    b.isClickable = false
+                    b.isFocusable = false
+                    if (i == questions[currentQuestionIndex].correctAnswerIndex) {
+                        b.setBackgroundResource(R.drawable.answer_correct)
+                    }
+                }
+
+                val angryCat = findViewById<ImageView>(R.id.angry_cat)
+                angryCat.visibility = View.VISIBLE
+                angryCat.startAnimation(AnimationUtils.loadAnimation(this@QuizActivity, R.anim.slide_up))
+
+                val nextQuestionButton = findViewById<Button>(R.id.next_question_button)
+                nextQuestionButton.visibility = View.VISIBLE
             }
+
         }.start()
     }
 
