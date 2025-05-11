@@ -91,7 +91,7 @@ class QuizActivity : AppCompatActivity() {
                 // Colorăm corect/greșit
                 if (index == question.correctAnswerIndex) {
                     score += calculateScore(timeTaken)
-                    button.setBackgroundColor(Color.GREEN)
+                    button.setBackgroundResource(R.drawable.answer_correct)
                 } else {
                     button.setBackgroundResource(R.drawable.answer_wrong)
                 }

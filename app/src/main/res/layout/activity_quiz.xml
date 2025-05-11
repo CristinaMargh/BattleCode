@@ -4,7 +4,7 @@
     android:padding="16dp"
     android:gravity="center_horizontal"
     android:layout_width="match_parent"
-android:background="#AED6F1"
+android:background="#9BA8DC"
     android:layout_height="match_parent">
 
     <TextView
@@ -25,7 +25,7 @@ android:background="#AED6F1"
         android:layout_marginBottom="24dp"
         android:textAlignment="center" />
 
-    <Button
+    <android.widget.Button
         android:id="@+id/answer1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -35,7 +35,7 @@ android:background="#AED6F1"
         android:background="@drawable/r_a_b"
         android:layout_marginBottom="8dp" />
 
-    <Button
+    <android.widget.Button
         android:id="@+id/answer2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,7 +45,7 @@ android:background="#AED6F1"
         android:background="@drawable/r_a_b"
         android:layout_marginBottom="8dp" />
 
-    <Button
+    <android.widget.Button
         android:id="@+id/answer3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,7 +55,7 @@ android:background="#AED6F1"
         android:background="@drawable/r_a_b"
         android:layout_marginBottom="8dp" />
 
-    <Button
+    <android.widget.Button
         android:id="@+id/answer4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
